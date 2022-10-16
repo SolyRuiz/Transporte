@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Fleet View -->
+    <record model="ir.ui.view" id="fleet_vehicle_product_inherit_form">
+        <field name="name">fleet.vehicle.product.inherit.form</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <field name="model_year" position="after">
+                <field name="product_id" context="{'default_rent_ok': True}"/>
+                <field name="rent_per_month" attrs="{'invisible':[('product_id', '=', False)]}"/>
+                <field name="rent_per_week" attrs="{'invisible':[('product_id', '=', False)]}"/>
+                <field name="rent_per_day" attrs="{'invisible':[('product_id', '=', False)]}"/>
+            </field>
+            <field name="company_id" position="after">
+                <field name="company_ids" groups="base.group_multi_company" widget="many2many_tags"/>
+            </field>
+            <field name="company_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- Product View -->
+    <record model="ir.ui.view" id="product_product_fleet_inherit_form">
+        <field name="name">fleet.product.product.inherit.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="browseinfo_rental_management.rental_products_product_form_view"/>
+        <field name="arch" type="xml">
+            <field name="rent_per_month" position="after">
+                <field name="rent_per_week"/>
+                <field name="rent_per_day"/>
+            </field>
+            <field name="replacement_value" position="after">
+                <field name="fleet_id" readonly="True"/>
+                <field name="license_plate" readonly="True"/>
+            </field>
+            <field name="company_id" position="after">
+                <field name="company_ids" groups="base.group_multi_company" widget="many2many_tags"/>
+            </field>
+            <field name="company_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
+
+
+    <!-- Rental Order Line View -->
+
+    <record model="ir.ui.view" id="rental_order_line_product_fleet_inherit_tree">
+        <field name="name">fleet.product.rental.order.inherit.form</field>
+        <field name="model">rental.order.line</field>
+        <field name="inherit_id" ref="browseinfo_rental_management.view_rental_order_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_categ_id']" position="after">
+                <field name="product_id" />
+                <field name="fleet_id" attrs="{'invisible':[('product_id', '=', False)]}" />
+                <field name="license_plate" attrs="{'invisible':[('product_id', '=', False)]}" />
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="rental_order_line_product_fleet_inherit_form">
+        <field name="name">fleet.product.rental.order.inherit.form</field>
+        <field name="model">rental.order.line</field>
+        <field name="inherit_id" ref="browseinfo_rental_management.view_rental_order_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="fleet_id" attrs="{'invisible':[('product_id', '=', False)]}" readonly="True"/>
+                <field name="license_plate" attrs="{'invisible':[('product_id', '=', False)]}" readonly="True"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id='fleet_vehicle_state_view_tree_' model='ir.ui.view'>
+        <field name="name">fleet.vehicle.state.tree</field>
+        <field name="model">fleet.vehicle.state</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_state_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="is_ingresar_resultados" />
+            </field>
+        </field>
+    </record>
+
+    <record id='fleet_vehicle_log_contract_view_form' model='ir.ui.view'>
+        <field name="name">fleet.vehicle.log_contract.form</field>
+        <field name="model">fleet.vehicle.log.contract</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_log_contract_view_form"/>
+        <field name="arch" type="xml">
+            <field name="active" position="before">
+                <div class="oe_button_box" name="button_box">   
+                    <button type="object" name="action_view_delivery_rental"
+                            class="oe_stat_button" icon="fa-truck"   groups="base.group_user">
+                        <field name="delivery_count" widget="statinfo" string="Recibir y entregar vehículo" />
+                    </button>
+                </div>
+            </field>
+            <field name="user_id" position="before">
+                <field name="cliente" />
+                <field name="ubicacion_de_alquiler" />
+                <field name="terminos_iniciales" />
+            </field>
+            <field name="purchaser_id" position="after">
+                <field name="frecuencia_de_facturacion" />
+                <field name="fecha_de_orden" />
+                <field name="almacen" />
+            </field>
+        </field>
+    </record>
+</odoo>
