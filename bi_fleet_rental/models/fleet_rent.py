@@ -207,12 +207,25 @@ class ReceiveDeliverVehicle(models.Model):
     end_result = fields.Selection([('Disponible','Disponible'),('Taller','Taller')], string="Ingresar resultados")
 
     def write(self, vals):
+        res = super(ReceiveDeliverVehicle, self).write(vals)
         if vals.get('end_result'):
             state_id = self.env['fleet.vehicle.state'].search([('is_ingresar_resultados','=',True)],limit=1)
             if state_id:
                 self.contract_id.write({
                     'state_id' : state_id and state_id.id
                 })
+        return res
+
+    @api.model
+    def create(self, vals):
+        res = super(ReceiveDeliverVehicle, self).create(vals)
+        if vals.get('end_result'):
+            state_id = self.env['fleet.vehicle.state'].search([('is_ingresar_resultados','=',True)],limit=1)
+            if state_id:
+                res.contract_id.write({
+                    'state_id' : state_id and state_id.id
+                })
+        return res
 
 class FleetVehicleState(models.Model):
     _inherit = 'fleet.vehicle.state'

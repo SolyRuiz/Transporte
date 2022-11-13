@@ -2,7 +2,6 @@
 
 from odoo import fields, models, api, _
 
-
 class VehicleTags(models.Model):
     _inherit = 'fleet.vehicle.tag'
 
@@ -24,6 +23,11 @@ class FleetVehicle(models.Model):
             find_tag_ids = self.env['fleet.vehicle.tag'].search([('tag_type','=','Chasis')])
             args = [('tag_ids','in',find_tag_ids.ids),('state_id.sequence','=',4)]
 
+        if self._context.get('Cabezal_Chasis'):
+            find_tag_ids = self.env['fleet.vehicle.tag'].search([('tag_type','in',['Chasis', 'Cabezal'])])
+            args = [('tag_ids','in',find_tag_ids.ids),('state_id.sequence','=',7)]
+        
+
         return super()._name_search(name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
 
     
@@ -38,8 +42,11 @@ class FleetVehicle(models.Model):
             find_tag_ids = self.env['fleet.vehicle.tag'].search([('tag_type','=','Chasis')])
             args = [('tag_ids','in',find_tag_ids.ids),('state_id.sequence','=',4)]
 
-        return super().search(args, offset=0, limit=None, order=None, count=False)
+        if self._context.get('Cabezal_Chasis'):
+            find_tag_ids = self.env['fleet.vehicle.tag'].search([('tag_type','in',['Chasis', 'Cabezal'])])
+            args = [('tag_ids','in',find_tag_ids.ids),('state_id.sequence','=',7)]
 
+        return super().search(args, offset=0, limit=None, order=None, count=False)
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
@@ -77,7 +84,6 @@ class ResPartner(models.Model):
             args = [('id','in',partner_ids.ids)]
 
         return super().search(args, offset=0, limit=None, order=None, count=False)
-
 
 class ResUsers(models.Model):
     _inherit = 'res.users'

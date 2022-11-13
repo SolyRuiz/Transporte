@@ -25,6 +25,17 @@
         </field>
     </record>
 
+    <record id="rental_deliver_vehicle_primary_form_view_inherit" model="ir.ui.view">
+        <field name="name">receive.deliver.vehicle.form.inherited</field>
+        <field name="model">receive.deliver.vehicle</field>
+        <field name="inherit_id" ref="bi_fleet_rental.receive_deliver_vehicle_form" />
+        <field name="arch" type="xml">
+            <field name="document_type" position="after">
+                <field name="vehicle_id" context="{'Cabezal_Chasis' : True}" />
+            </field>
+        </field>
+    </record>
+
     <record id="view_move_form_inherit" model="ir.ui.view">
         <field name="name">account.move.inherited</field>
         <field name="model">account.move</field>

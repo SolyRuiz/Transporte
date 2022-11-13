@@ -103,3 +103,37 @@ class HRJob(models.Model):
     _inherit = 'hr.job'
 
     is_mechanic = fields.Boolean('Is Mechanic')
+
+class RecieveDeliverVehicle(models.Model):
+    _inherit = 'receive.deliver.vehicle'
+
+    vehicle_id = fields.Many2one('fleet.vehicle', string="Vehicle")
+
+    def write(self, vals):
+        res = super(RecieveDeliverVehicle, self).write(vals)
+        if vals.get('end_result'):
+            state_id = self.env['fleet.vehicle.state']
+            if self.end_result == 'Disponible':
+                state_id = self.env['fleet.vehicle.state'].search([('sequence','=',4)])
+            if self.end_result == 'Taller':
+                state_id = self.env['fleet.vehicle.state'].search([('sequence','=',8)])
+            if state_id:
+                self.vehicle_id.write({
+                    'state_id' : state_id and state_id.id
+                })
+        return res
+    
+    @api.model
+    def create(self, vals):
+        res = super(RecieveDeliverVehicle, self).create(vals)
+        if vals.get('end_result'):
+            state_id = self.env['fleet.vehicle.state']
+            if res.end_result == 'Disponible':
+                state_id = self.env['fleet.vehicle.state'].search([('sequence','=',4)])
+            if res.end_result == 'Taller':
+                state_id = self.env['fleet.vehicle.state'].search([('sequence','=',8)])
+            if state_id:
+                res.vehicle_id.write({
+                    'state_id' : state_id and state_id.id
+                })
+        return res
