@@ -84,14 +84,14 @@ class AccountMove(models.Model):
         res = super(AccountMove, self).action_post()
         for so in self:
             if so.cabezal_id:
-                state_id = self.env['fleet.vehicle.state'].search([('sequence','=',4)])
+                state_id = self.env['fleet.vehicle.state'].search([('sequence','=',7)])
                 if state_id:
                     so.cabezal_id.write({
                         'state_id' : state_id and state_id.id
                     })
 
             if so.chasis_id:
-                state_id = self.env['fleet.vehicle.state'].search([('sequence','=',4)])
+                state_id = self.env['fleet.vehicle.state'].search([('sequence','=',7)])
                 if state_id:
                     so.chasis_id.write({
                         'state_id' : state_id and state_id.id
