@@ -104,6 +104,7 @@ class HRJob(models.Model):
 
     is_mechanic = fields.Boolean('Is Mechanic')
 
+
 class RecieveDeliverVehicle(models.Model):
     _inherit = 'receive.deliver.vehicle'
 

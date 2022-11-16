@@ -25,7 +25,13 @@ class FleetVehicle(models.Model):
 
         if self._context.get('Cabezal_Chasis'):
             find_tag_ids = self.env['fleet.vehicle.tag'].search([('tag_type','in',['Chasis', 'Cabezal'])])
-            args = [('tag_ids','in',find_tag_ids.ids),('state_id.sequence','=',7)]
+            end_result = self._context.get('end_result')
+            document_type = self._context.get('document_type')
+            if end_result == 'Disponible' and document_type == 'Entregar':
+                sequence = 8
+            else:
+                sequence = 7
+            args = [('tag_ids','in',find_tag_ids.ids),('state_id.sequence','=',sequence)]
         
 
         return super()._name_search(name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
@@ -44,7 +50,13 @@ class FleetVehicle(models.Model):
 
         if self._context.get('Cabezal_Chasis'):
             find_tag_ids = self.env['fleet.vehicle.tag'].search([('tag_type','in',['Chasis', 'Cabezal'])])
-            args = [('tag_ids','in',find_tag_ids.ids),('state_id.sequence','=',7)]
+            end_result = self._context.get('end_result')
+            document_type = self._context.get('document_type')
+            if end_result == 'Disponible' and document_type == 'Entregar':
+                sequence = 8
+            else:
+                sequence = 7
+            args = [('tag_ids','in',find_tag_ids.ids),('state_id.sequence','=',sequence)]
 
         return super().search(args, offset=0, limit=None, order=None, count=False)
 

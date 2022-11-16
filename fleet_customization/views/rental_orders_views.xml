@@ -30,8 +30,8 @@
         <field name="model">receive.deliver.vehicle</field>
         <field name="inherit_id" ref="bi_fleet_rental.receive_deliver_vehicle_form" />
         <field name="arch" type="xml">
-            <field name="document_type" position="after">
-                <field name="vehicle_id" context="{'Cabezal_Chasis' : True}" />
+            <field name="end_result" position="after">
+                <field name="vehicle_id" context="{'Cabezal_Chasis' : True, 'end_result' : end_result, 'document_type' : document_type}" />
             </field>
         </field>
     </record>
